@@ -7,7 +7,7 @@ export const NAV_LINKS = [
 ];
 
 export const STATS = [
-  { num: '3+', label: 'Years XP' },
+  { num: '2+', label: 'Years XP' },
   { num: '10+', label: 'Projects' },
   { num: '2', label: 'Companies' },
   { num: '∞', label: 'Coffee' },
@@ -78,35 +78,6 @@ export const SKILL_TAGS = [
   'Plasmic','AWS EC2','JIRA','Express.js','JavaScript',
 ];
 
-export const PROJECTS = [
-  {
-    num: '01',
-    title: 'Feedbackr',
-    highlight: '📈 1M+ → <100 daily API requests',
-    desc: 'Feedback collection & management platform for organizations. Architected RTK Query caching strategy achieving a 10,000x reduction in server requests — massive performance and cost win.',
-    tags: ['ReactJS', 'SCSS', 'SupaBase', 'RTK Query', 'Freelance'],
-    color: '#00e5ff',
-    status: 'SHIPPED',
-  },
-  {
-    num: '02',
-    title: 'Virtual Study Network',
-    highlight: '☁️ Cloud-powered remote desktops',
-    desc: 'AWS EC2 virtual machines for lower-end PCs with a full UI for OS selection and workspace management — complete with cloud document storage and TextPad integration.',
-    tags: ['AWS EC2', 'JavaScript', 'PHP', 'HTML/CSS', 'Cloud'],
-    color: '#8b5cf6',
-    status: 'LIVE',
-  },
-  {
-    num: '03',
-    title: 'BimaMandi Platform',
-    highlight: '🎯 Production at Nivotime',
-    desc: 'Large-scale insurance platform with complex metadata-driven dynamic forms. RJSF-based architecture cut duplicate UI logic by 60%. Redux Toolkit + RTK Query for global state & API caching.',
-    tags: ['React', 'RJSF', 'Redux', 'TypeScript', 'Plasmic', 'Figma'],
-    color: '#00ff9d',
-    status: 'PRODUCTION',
-  },
-];
 
 export const ACHIEVEMENTS = [
   { id: 'about', title: 'Profile Unlocked', desc: 'You discovered Saurabh\'s story', icon: '🔓' },
@@ -117,9 +88,125 @@ export const ACHIEVEMENTS = [
 ];
 
 export const CONTACT_LINKS = [
-  { icon: '✉', label: 'Email', value: 'saurabhpathak9323@gmail.com', href: 'mailto:saurabhpathak9323@gmail.com' },
+  { icon: '✉', label: 'Email', value: 'saurabhpathak52@gmail.com', href: 'mailto:saurabhpathak52@gmail.com' },
   { icon: '📞', label: 'Phone', value: '+91 9323673405', href: 'tel:+919323673405' },
   { icon: 'in', label: 'LinkedIn', value: 'linkedin.com/in/saurabh-pathak', href: 'https://linkedin.com/in/saurabh-pathak' },
   { icon: '</>', label: 'GitHub', value: 'github.com/saurabh9323', href: 'https://github.com/saurabh9323' },
   { icon: '📍', label: 'Location', value: 'Mumbai, Maharashtra, India', href: null },
+];
+
+export const PROJECTS = [
+  {
+    num: '01',
+    title: 'BimaMandi Platform',
+    highlight: '🎯 Production at Nivotime',
+    desc: 'A retail insurance distribution platform for brokers to compare, purchase and manage policies across health, life and motor categories. Led full platform development with modular, scalable architecture.',
+    tags: ['React', 'RJSF', 'Redux', 'TypeScript', 'Plasmic', 'Figma', 'Fast API'],
+    color: '#00e5ff',
+    status: 'PRODUCTION',
+    href: 'https://bimamandi.com', // 🔁 replace with real URL
+    highlights: [
+      'Employee enrollment workflows',
+      'Corporate admin portal with access controls',
+      'Real-time data dashboards & reports',
+      'Compliance and policy issuance automation',
+    ],
+  },
+  {
+    num: '02',
+    title: 'BuyPolicyNow',
+    highlight: '🛒 B2C Insurance Portal',
+    desc: 'A B2C insurance portal enabling individuals to compare and purchase policies online across life, motor and health categories. Led frontend-backend integration and built APIs for multiple insurers.',
+    tags: ['Redux.js', 'Next.js', 'Node.js', 'API Integration'],
+    color: '#8b5cf6',
+    status: 'LIVE',
+    href: 'https://buypolicynow.com', // 🔁 replace with real URL
+    highlights: [
+      'Multi-product policy comparison',
+      'Dynamic quotation engine',
+      'End-to-end digital purchase workflow',
+      'Payment integration and status tracking',
+    ],
+  },
+  {
+    num: '03',
+    title: 'IBS — Insurance B2B Suite',
+    highlight: '🏢 Enterprise at Nivotime',
+    desc: 'Enterprise-grade platform for corporate clients and employees. HR/corporates manage eligibility, view reports, and monitor claims while employees self-enroll into sponsored insurance policies.',
+    tags: ['Fast API', 'Redux.js', 'Next.js', 'TypeScript'],
+    color: '#ff6b35',
+    status: 'PRODUCTION',
+    href: null, // internal tool, no public link
+    highlights: [
+      'Employee enrollment workflows',
+      'Corporate admin portal with access controls',
+      'Real-time data dashboards & reports',
+      'Compliance and policy issuance automation',
+    ],
+  },
+  {
+    num: '04',
+    title: 'Yuva Suraksha Yojana',
+    highlight: '🎓 College Insurance Portal',
+    desc: 'Centralized portal for educational institutes (colleges/universities) to register and purchase insurance coverage for students. Supports bulk uploads, enrollment tracking and certificate generation.',
+    tags: ['Redux.js', 'CSS (CSS)', 'Next.js', 'Node.js'],
+    color: '#00ff9d',
+    status: 'LIVE',
+    href: null, // 🔁 replace with real URL if available
+    highlights: [
+      'College & student registration workflows',
+      'Bulk policy issuance',
+      'Policy document generator',
+      'Reporting for partner institutions',
+    ],
+  },
+  {
+    num: '05',
+    title: 'Philipe CRM',
+    highlight: '⚙️ Microservice Architecture',
+    desc: 'A full-featured CRM platform built on a microservices architecture. Handles lead management, client lifecycle, automation workflows and reporting — with each domain isolated as an independent service.',
+    tags: ['Next.js', 'Node.js', 'FastAPI', '.NET', 'Microservices', 'Docker'],
+    color: '#ff2d55',
+    status: 'IN DEV',
+    href: null, // 🔁 add link when live
+    highlights: [
+      'Lead & pipeline management',
+      'Microservice-isolated domains (auth, leads, billing)',
+      'FastAPI for ML/analytics services',
+      '.NET for core business logic',
+      'Next.js unified frontend',
+    ],
+  },
+  {
+    num: '06',
+    title: 'Feedbackr',
+    highlight: '📈 1M+ → <100 daily API requests',
+    desc: 'Feedback collection & management platform for organizations. Architected RTK Query caching strategy achieving a 10,000x reduction in server requests — massive performance and cost win.',
+    tags: ['ReactJS', 'SCSS', 'SupaBase', 'RTK Query', 'Freelance'],
+    color: '#00e5ff',
+    status: 'SHIPPED',
+    href: null,
+    highlights: [
+      '10,000x reduction in API calls via RTK Query',
+      'Multi-org feedback collection',
+      'Real-time analytics dashboard',
+      'Role-based access control',
+    ],
+  },
+  {
+    num: '07',
+    title: 'Virtual Study Network',
+    highlight: '☁️ Cloud-powered remote desktops',
+    desc: 'AWS EC2 virtual machines for lower-end PCs with a full UI for OS selection and workspace management — complete with cloud document storage and TextPad integration.',
+    tags: ['AWS EC2', 'JavaScript', 'PHP', 'HTML/CSS', 'Cloud'],
+    color: '#8b5cf6',
+    status: 'LIVE',
+    href: null,
+    highlights: [
+      'On-demand EC2 provisioning',
+      'OS selection interface',
+      'Cloud document storage',
+      'Low-spec PC support',
+    ],
+  },
 ];
