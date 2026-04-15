@@ -1,10 +1,12 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { JOURNEY } from '@/lib/data';
 
 export default function Journey() {
   const listRef = useRef<HTMLUListElement>(null);
+  const sectionRef = useRef<HTMLElement>(null);
+const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const items = listRef.current?.querySelectorAll('.journey-item');
@@ -16,11 +18,23 @@ export default function Journey() {
     items.forEach(el => obs.observe(el));
     return () => obs.disconnect();
   }, []);
+  useEffect(() => {
+  const obs = new IntersectionObserver(
+    ([entry]) => {
+      if (entry.isIntersecting) setVisible(true);
+    },
+    { threshold: 0.1 }
+  );
+
+  if (sectionRef.current) obs.observe(sectionRef.current);
+
+  return () => obs.disconnect();
+}, []);
 
   return (
-    <section id="journey">
+    <section id="journey"  ref={sectionRef}>
       <div className="section-wrap">
-        <div className="fade-in">
+        <div className={`fade-in ${visible ? 'visible' : ''}`}>
           <div className="section-label">02 — Journey</div>
           <h2 className="section-title">Quest Log</h2>
           <div className="section-divider" />

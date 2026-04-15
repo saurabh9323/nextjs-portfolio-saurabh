@@ -23,7 +23,7 @@ export default function About() {
       <div className="section-wrap">
         <div className={`fade-in ${visible ? 'visible' : ''}`}>
           <div className="section-label">01 — About</div>
-          <h2 className="section-title">Operator Profile</h2>
+          <h2 className="section-title">Profile</h2>
           <div className="section-divider" />
         </div>
 

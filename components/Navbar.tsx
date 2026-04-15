@@ -66,7 +66,7 @@ export default function Navbar() {
           e.currentTarget.style.boxShadow = 'none';
         }}
       >
-        ⬇ RESUME
+       ⬇ GET MY RESUME
       </a>
       {/* HUD status indicator */}
       <div style={{

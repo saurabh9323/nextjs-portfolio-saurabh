@@ -73,7 +73,7 @@ export default function Skills() {
   return (
     <section id="skills" ref={sectionRef}>
       <div className="section-wrap">
-        <div className="fade-in">
+       <div className={`fade-in ${animated ? 'visible' : ''}`}>
           <div className="section-label">03 — Skills</div>
           <h2 className="section-title">Skill Tree</h2>
           <div className="section-divider" />
