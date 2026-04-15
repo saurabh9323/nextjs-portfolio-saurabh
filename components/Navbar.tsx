@@ -38,6 +38,36 @@ export default function Navbar() {
           </li>
         ))}
       </ul>
+      <a
+        href="/saurabh-resume.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        download
+        style={{
+          fontFamily: "'JetBrains Mono', monospace",
+          fontSize: '0.65rem',
+          letterSpacing: '0.2em',
+          padding: '0.35rem 0.9rem',
+          border: '1px solid var(--cyan)',
+          color: 'var(--cyan)',
+          textDecoration: 'none',
+          marginLeft: '1rem',
+          display: 'flex',
+          alignItems: 'center',
+          gap: '0.4rem',
+          transition: 'all 0.2s',
+        }}
+        onMouseEnter={(e: React.MouseEvent<HTMLAnchorElement>) => {
+          e.currentTarget.style.background = 'rgba(0,229,255,0.1)';
+          e.currentTarget.style.boxShadow = '0 0 10px rgba(0,229,255,0.4)';
+        }}
+        onMouseLeave={(e: React.MouseEvent<HTMLAnchorElement>) => {
+          e.currentTarget.style.background = 'transparent';
+          e.currentTarget.style.boxShadow = 'none';
+        }}
+      >
+        ⬇ RESUME
+      </a>
       {/* HUD status indicator */}
       <div style={{
         fontFamily: "'JetBrains Mono', monospace",

@@ -31,13 +31,13 @@ export default function About() {
           <div className={`about-text fade-in ${visible ? 'visible' : ''}`} style={{ transitionDelay: '0.1s' }}>
 
             {/* Terminal prompt header */}
-            <div className="terminal-prompt">
+            {/* <div className="terminal-prompt">
               <span>root@saurabh:~$</span> cat profile.json
-            </div>
+            </div> */}
 
             <p>
               I&apos;m <strong>Saurabh Pathak</strong>, a Full-Stack Engineer based in Mumbai
-              with <strong>3+ years</strong> of production experience building scalable,
+              with <strong>2+ years</strong> of production experience building scalable,
               user-centric web applications.
             </p>
             <p>

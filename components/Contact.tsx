@@ -101,9 +101,9 @@ export default function Contact() {
 
         <div className="contact-layout">
           <div className={`fade-in ${visible ? 'visible' : ''}`} style={{ transitionDelay: '0.1s' }}>
-            <div className="terminal-prompt">
+            {/* <div className="terminal-prompt">
               <span>root@saurabh:~$</span> ./open-comms.sh
-            </div>
+            </div> */}
             <p className="contact-intro">
               Always open to exciting opportunities, collaborations, and challenging problems.
               Whether you have a product to build, a team to join, or just want to talk tech — reach out!

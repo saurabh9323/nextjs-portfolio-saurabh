@@ -217,7 +217,7 @@ export default function Hero() {
           <strong style={{ color: 'var(--cyan)' }}> React</strong>,
           <strong style={{ color: 'var(--purple)' }}> TypeScript</strong>, and
           <strong style={{ color: 'var(--green)' }}> modern cloud</strong>.
-          3+ years shipping production-grade products.
+          2+ years shipping production-grade products.
         </p>
 
         <div className="hero-btns">
