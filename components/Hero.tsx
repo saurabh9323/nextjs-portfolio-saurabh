@@ -1,251 +1,116 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-
-const ROLES = [
-  'Full-Stack Engineer',
-  'React / Next.js Dev',
-  'TypeScript Architect',
-  'UI/UX Craftsman',
-  'Cloud Enthusiast',
-];
+import { useEffect, useRef } from 'react';
 
 export default function Hero() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const [roleText, setRoleText] = useState('');
-  const [roleIdx, setRoleIdx] = useState(0);
-  const [typing, setTyping] = useState(true);
 
-  // Typewriter effect
-  useEffect(() => {
-    let timeout: ReturnType<typeof setTimeout>;
-    const current = ROLES[roleIdx];
-
-    if (typing) {
-      if (roleText.length < current.length) {
-        timeout = setTimeout(() => setRoleText(current.slice(0, roleText.length + 1)), 60);
-      } else {
-        timeout = setTimeout(() => setTyping(false), 2000);
-      }
-    } else {
-      if (roleText.length > 0) {
-        timeout = setTimeout(() => setRoleText(roleText.slice(0, -1)), 35);
-      } else {
-        setRoleIdx((i) => (i + 1) % ROLES.length);
-        setTyping(true);
-      }
-    }
-
-    return () => clearTimeout(timeout);
-  }, [roleText, typing, roleIdx]);
-
-  // Three.js hero scene
   useEffect(() => {
     const canvas = canvasRef.current;
-    if (!canvas || typeof window === 'undefined') return;
+    if (!canvas) return;
+    let frame = 0;
+    let disposed = false;
+    let cleanup = () => {};
 
-    let THREE: typeof import('three');
-    let animId: number;
-
-    import('three').then((mod) => {
-      THREE = mod;
-
-      const W = canvas.clientWidth || window.innerWidth;
-      const H = canvas.clientHeight || window.innerHeight;
-      canvas.width = W; canvas.height = H;
-
-      const scene    = new THREE.Scene();
-      const camera   = new THREE.PerspectiveCamera(70, W / H, 0.1, 1000);
-      camera.position.z = 10;
-
+    import('three').then((THREE) => {
+      if (disposed) return;
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(45, 1, 0.1, 100);
+      camera.position.set(0, 0, 8);
       const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
-      renderer.setSize(W, H);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.7));
 
-      // Stars
-      const sGeo = new THREE.BufferGeometry();
-      const sc   = 4000;
-      const sp   = new Float32Array(sc * 3);
-      for (let i = 0; i < sc * 3; i++) sp[i] = (Math.random() - 0.5) * 200;
-      sGeo.setAttribute('position', new THREE.BufferAttribute(sp, 3));
-      scene.add(new THREE.Points(sGeo, new THREE.PointsMaterial({ color: 0xffffff, size: 0.07, transparent: true, opacity: 0.7 })));
-
-      // Grid floor (XZ plane)
-      const gridHelper = new THREE.GridHelper(60, 40, 0x00e5ff, 0x0a2a3a);
-      gridHelper.position.y = -8;
-      (gridHelper.material as THREE.LineBasicMaterial).transparent = true;
-      (gridHelper.material as THREE.LineBasicMaterial).opacity = 0.25;
-      scene.add(gridHelper);
-
-      // DNA double helix
-      const helixPts1: THREE.Vector3[] = [], helixPts2: THREE.Vector3[] = [];
-      for (let i = 0; i <= 200; i++) {
-        const t = i / 200, angle = t * Math.PI * 8, y = (t - 0.5) * 14;
-        helixPts1.push(new THREE.Vector3(Math.cos(angle) * 1.5, y, Math.sin(angle) * 1.5));
-        helixPts2.push(new THREE.Vector3(Math.cos(angle + Math.PI) * 1.5, y, Math.sin(angle + Math.PI) * 1.5));
-      }
-      const h1G = new THREE.BufferGeometry().setFromPoints(helixPts1);
-      const h2G = new THREE.BufferGeometry().setFromPoints(helixPts2);
-      const helix = new THREE.Group();
-      helix.add(new THREE.Line(h1G, new THREE.LineBasicMaterial({ color: 0x00e5ff, transparent: true, opacity: 0.55 })));
-      helix.add(new THREE.Line(h2G, new THREE.LineBasicMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.55 })));
-      for (let i = 0; i <= 20; i++) {
-        const t = i / 20, angle = t * Math.PI * 8, y = (t - 0.5) * 14;
-        const rGeo = new THREE.BufferGeometry().setFromPoints([
-          new THREE.Vector3(Math.cos(angle) * 1.5, y, Math.sin(angle) * 1.5),
-          new THREE.Vector3(Math.cos(angle + Math.PI) * 1.5, y, Math.sin(angle + Math.PI) * 1.5),
-        ]);
-        helix.add(new THREE.Line(rGeo, new THREE.LineBasicMaterial({ color: 0x00ff9d, transparent: true, opacity: 0.25 })));
-      }
-      helix.position.x = 4;
-      scene.add(helix);
-
-      // Wireframe icosahedron
-      const wGeo    = new THREE.IcosahedronGeometry(3.5, 1);
-      const wSphere = new THREE.Mesh(wGeo, new THREE.MeshBasicMaterial({ color: 0x00e5ff, wireframe: true, transparent: true, opacity: 0.08 }));
-      wSphere.position.x = -4;
-      scene.add(wSphere);
-
-      // Orbiting torus rings
-      const ring1 = new THREE.Mesh(
-        new THREE.TorusGeometry(5, 0.015, 8, 120),
-        new THREE.MeshBasicMaterial({ color: 0x00e5ff, transparent: true, opacity: 0.35 })
+      const group = new THREE.Group();
+      scene.add(group);
+      const core = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(2.15, 2),
+        new THREE.MeshBasicMaterial({ color: 0x9ef01a, wireframe: true, transparent: true, opacity: 0.34 })
       );
-      ring1.rotation.x = Math.PI / 4;
-      scene.add(ring1);
-
-      const ring2 = new THREE.Mesh(
-        new THREE.TorusGeometry(6.5, 0.012, 8, 150),
-        new THREE.MeshBasicMaterial({ color: 0x8b5cf6, transparent: true, opacity: 0.25 })
+      const shell = new THREE.Mesh(
+        new THREE.IcosahedronGeometry(2.85, 1),
+        new THREE.MeshBasicMaterial({ color: 0x8b5cf6, wireframe: true, transparent: true, opacity: 0.14 })
       );
-      ring2.rotation.x = -Math.PI / 5;
-      ring2.rotation.z =  Math.PI / 3;
-      scene.add(ring2);
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(3.25, 0.018, 8, 160),
+        new THREE.MeshBasicMaterial({ color: 0xe7f9a9, transparent: true, opacity: 0.5 })
+      );
+      ring.rotation.x = 1.1;
+      group.add(core, shell, ring);
 
-      // Floating particles
-      const fpGeo = new THREE.BufferGeometry();
-      const fpC   = 100;
-      const fpP   = new Float32Array(fpC * 3);
-      for (let i = 0; i < fpC * 3; i++) fpP[i] = (Math.random() - 0.5) * 28;
-      fpGeo.setAttribute('position', new THREE.BufferAttribute(fpP, 3));
-      scene.add(new THREE.Points(fpGeo, new THREE.PointsMaterial({ color: 0x00ff9d, size: 0.12, transparent: true, opacity: 0.55 })));
-
-      // Small octahedrons floating
-      const floaters: THREE.Mesh[] = [];
-      for (let i = 0; i < 6; i++) {
-        const m = new THREE.Mesh(
-          new THREE.OctahedronGeometry(0.15 + Math.random() * 0.2),
-          new THREE.MeshBasicMaterial({ color: [0x00e5ff, 0x8b5cf6, 0x00ff9d][i % 3], wireframe: true, transparent: true, opacity: 0.5 })
-        );
-        m.position.set((Math.random() - 0.5) * 14, (Math.random() - 0.5) * 8, (Math.random() - 0.5) * 6);
-        scene.add(m);
-        floaters.push(m);
+      const pointsGeometry = new THREE.BufferGeometry();
+      const positions = new Float32Array(450 * 3);
+      for (let i = 0; i < positions.length; i += 3) {
+        const radius = 4 + Math.random() * 4;
+        const angle = Math.random() * Math.PI * 2;
+        positions[i] = Math.cos(angle) * radius;
+        positions[i + 1] = (Math.random() - 0.5) * 9;
+        positions[i + 2] = Math.sin(angle) * radius;
       }
+      pointsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+      const points = new THREE.Points(pointsGeometry, new THREE.PointsMaterial({ color: 0xffffff, size: 0.025, transparent: true, opacity: 0.45 }));
+      scene.add(points);
 
-      // Mouse parallax
-      let targetX = 0, targetY = 0;
-      const onMouse = (e: MouseEvent) => {
-        targetX = (e.clientX / window.innerWidth  - 0.5) * 2;
-        targetY = (e.clientY / window.innerHeight - 0.5) * 2;
+      let pointerX = 0, pointerY = 0;
+      const onPointer = (event: PointerEvent) => {
+        pointerX = (event.clientX / window.innerWidth - 0.5) * 0.65;
+        pointerY = (event.clientY / window.innerHeight - 0.5) * 0.4;
       };
-      document.addEventListener('mousemove', onMouse);
-
-      let t = 0;
-      function animate() {
-        animId = requestAnimationFrame(animate);
-        t += 0.005;
-        helix.rotation.y   += 0.006;
-        wSphere.rotation.x += 0.003;
-        wSphere.rotation.y += 0.005;
-        ring1.rotation.z   += 0.004;
-        ring2.rotation.z   -= 0.003;
-        ring2.rotation.y   += 0.002;
-        gridHelper.position.z = ((t * 2) % 1.5) - 0.75; // animated grid scroll
-        floaters.forEach((f, i) => {
-          f.rotation.x += 0.01 + i * 0.003;
-          f.rotation.y += 0.008;
-          f.position.y += Math.sin(t + i) * 0.003;
-        });
-        camera.position.x += (targetX * 1.5 - camera.position.x) * 0.04;
-        camera.position.y += (-targetY - camera.position.y) * 0.04;
-        camera.lookAt(0, 0, 0);
-        renderer.render(scene, camera);
-      }
-      animate();
-
-      const onResize = () => {
-        const nW = canvas.clientWidth, nH = canvas.clientHeight;
-        camera.aspect = nW / nH;
+      const resize = () => {
+        const { clientWidth: width, clientHeight: height } = canvas;
+        renderer.setSize(width, height, false);
+        camera.aspect = width / Math.max(height, 1);
         camera.updateProjectionMatrix();
-        renderer.setSize(nW, nH);
       };
-      window.addEventListener('resize', onResize);
-
-      return () => {
-        cancelAnimationFrame(animId);
-        document.removeEventListener('mousemove', onMouse);
-        window.removeEventListener('resize', onResize);
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const animate = () => {
+        group.rotation.y += reduceMotion ? 0 : 0.0028;
+        group.rotation.x += (pointerY - group.rotation.x) * 0.025;
+        group.position.x += (pointerX - group.position.x) * 0.025;
+        shell.rotation.z -= reduceMotion ? 0 : 0.0015;
+        points.rotation.y += reduceMotion ? 0 : 0.00035;
+        renderer.render(scene, camera);
+        frame = requestAnimationFrame(animate);
+      };
+      window.addEventListener('pointermove', onPointer, { passive: true });
+      window.addEventListener('resize', resize);
+      resize();
+      animate();
+      cleanup = () => {
+        cancelAnimationFrame(frame);
+        window.removeEventListener('pointermove', onPointer);
+        window.removeEventListener('resize', resize);
+        pointsGeometry.dispose();
         renderer.dispose();
       };
     });
+
+    return () => { disposed = true; cleanup(); };
   }, []);
 
   return (
     <section id="hero">
-      <canvas ref={canvasRef} id="hero-canvas" />
-
-      {/* HUD corners */}
-      <div className="hud-corner hud-tl" />
-      <div className="hud-corner hud-tr" />
-      <div className="hud-corner hud-bl" />
-      <div className="hud-corner hud-br" />
-
-      <div className="hero-content" style={{ animation: 'fadeUp 1s 0.3s both' }}>
-        <div className="hero-eyebrow">// Full-Stack Engineer · Mumbai, India</div>
-
-        <h1 className="hero-name glitch" data-text="SAURABH PATHAK">
-          SAURABH PATHAK
-        </h1>
-
-        <p className="hero-role">
-          {roleText}
-          <span className="hero-role-cursor" />
-        </p>
-
-        <p className="hero-desc">
-          Crafting high-performance web experiences at the intersection of
-          <strong style={{ color: 'var(--cyan)' }}> React</strong>,
-          <strong style={{ color: 'var(--purple)' }}> TypeScript</strong>, and
-          <strong style={{ color: 'var(--green)' }}> modern cloud</strong>.
-          2+ years shipping production-grade products.
-        </p>
-
+      <canvas ref={canvasRef} id="hero-canvas" aria-hidden="true" />
+      <div className="hero-noise" />
+      <div className="hero-content">
+        <div className="hero-kicker"><span /> Available for select opportunities</div>
+        <p className="hero-eyebrow">Full-stack engineer · Mumbai, India</p>
+        <h1 className="hero-name">I build digital products<br /><em>people remember.</em></h1>
+        <p className="hero-desc">I’m Saurabh Pathak—an engineer focused on turning complex product ideas into fast, scalable, beautifully considered experiences.</p>
         <div className="hero-btns">
-          <a href="#projects" className="btn-primary"
-            onClick={e => { e.preventDefault(); document.querySelector('#projects')?.scrollIntoView({ behavior: 'smooth' }); }}>
-            View Projects
-          </a>
-          <a href="#contact" className="btn-ghost"
-            onClick={e => { e.preventDefault(); document.querySelector('#contact')?.scrollIntoView({ behavior: 'smooth' }); }}>
-            Hire Me
-          </a>
+          <a href="#projects" className="btn-primary">Explore my work <span>↘</span></a>
+          <a href="mailto:saurabhpathak52@gmail.com" className="btn-ghost">Let’s talk <span>↗</span></a>
         </div>
-
-        {/* XP BAR */}
-        <div className="hero-xp-bar" style={{ marginTop: '2.5rem' }}>
-          <div className="hero-xp-label">
-            <span>XP</span><span>LVL 3 · 7,300 / 10,000</span>
-          </div>
-          <div className="hero-xp-track">
-            <div className="hero-xp-fill" />
-          </div>
+        <button className="hero-recruiter-link" onClick={() => document.querySelector<HTMLButtonElement>('.recruiter-trigger')?.click()}>
+          Hiring? Open my 30-second candidate brief <span>→</span>
+        </button>
+        <div className="hero-proof">
+          <div><strong>2+</strong><span>Years building</span></div>
+          <div><strong>10+</strong><span>Products shipped</span></div>
+          <div><strong>10,000×</strong><span>API reduction</span></div>
         </div>
       </div>
-
-      <div className="scroll-indicator">
-        <span className="scroll-text">Scroll</span>
-        <div className="scroll-line" />
-      </div>
+      <div className="hero-orbit-label">Interactive WebGL / move your cursor</div>
+      <a className="scroll-indicator" href="#about" aria-label="Scroll to about"><span>Scroll</span><i /></a>
     </section>
   );
 }

@@ -37,6 +37,16 @@ function ProjectCard({ project, visible, delay }: {
     >
       <div className="card-shimmer" />
 
+      <div className={`project-preview preview-${project.num}`} aria-hidden="true">
+        <div className="preview-top"><span /><span /><span /><i>{project.status}</i></div>
+        <div className="preview-sidebar"><i /><i /><i /><i /></div>
+        <div className="preview-content">
+          <span className="preview-title" />
+          <div className="preview-metrics"><i /><i /><i /></div>
+          <div className="preview-graph">{[42, 68, 49, 82, 61, 91, 74].map((h, i) => <i key={i} style={{ height: `${h}%` }} />)}</div>
+        </div>
+      </div>
+
       {/* Status badge */}
       <div className="proj-status">{project.status}</div>
 

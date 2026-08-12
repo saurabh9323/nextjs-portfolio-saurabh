@@ -6,6 +6,7 @@ import { NAV_LINKS } from '@/lib/data';
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [active, setActive] = useState('');
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 50);
@@ -18,14 +19,16 @@ export default function Navbar() {
     const target = document.querySelector(href);
     target?.scrollIntoView({ behavior: 'smooth' });
     setActive(href);
+    setOpen(false);
   };
 
   return (
-    <nav style={{ boxShadow: scrolled ? '0 4px 30px rgba(0,0,0,0.5)' : 'none' }}>
+    <nav className={scrolled ? 'nav-scrolled' : ''} aria-label="Main navigation">
       <a href="#hero" className="nav-logo" onClick={e => handleNav(e, '#hero')}>
         SP//
       </a>
-      <ul className="nav-links">
+      <button className="nav-toggle" onClick={() => setOpen(v => !v)} aria-expanded={open} aria-label="Toggle navigation"><span /><span /></button>
+      <ul className={`nav-links ${open ? 'nav-open' : ''}`}>
         {NAV_LINKS.map(link => (
           <li key={link.href}>
             <a
@@ -43,6 +46,7 @@ export default function Navbar() {
         target="_blank"
         rel="noopener noreferrer"
         download
+        className="nav-resume"
         style={{
           fontFamily: "'JetBrains Mono', monospace",
           fontSize: '0.65rem',
